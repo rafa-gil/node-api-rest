@@ -1,12 +1,13 @@
 import fastify from 'fastify'
-import { knex } from './database'
 import { env } from './env'
+import { transactionsRoutes } from './routes/transactions'
+import cookie from '@fastify/cookie'
 
 const app = fastify()
 
-app.get('/hello', async () => {
-  const tables = await knex('sqlite_schema').select('*')
-  return tables
+app.register(cookie)
+app.register(transactionsRoutes, {
+  prefix: 'transactions',
 })
 
 app
@@ -14,5 +15,5 @@ app
     port: env.PORT,
   })
   .then(() => {
-    console.log('server running on port 3308')
+    console.log('server running on port 3333')
   })
